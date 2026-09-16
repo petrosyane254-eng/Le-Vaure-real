@@ -1,10 +1,79 @@
 import "./globals.css";
+import type { Metadata } from "next";
 import DesignRuntime from "@/components/DesignRuntime";
 import SiteChrome from "@/components/SiteChrome";
 
-export const metadata = {
-  title: "LE VAURÉ",
-  description: "Premium Armenian fashion",
+const SITE_URL = "https://xn--levaur-gva.store";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+
+  title: {
+    default: "LE VAURÉ | Armenian Fashion",
+    template: "%s | LE VAURÉ",
+  },
+
+  description:
+    "Discover LE VAURÉ — Armenian fashion, contemporary clothing and distinctive collections.",
+
+  applicationName: "LE VAURÉ",
+
+  keywords: [
+    "LE VAURÉ",
+    "LEVAURE",
+    "LE VAURE",
+    "Le Vauré",
+    "Armenian fashion",
+    "Armenian clothing",
+    "Armenian fashion brand",
+  ],
+
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "LE VAURÉ",
+    title: "LE VAURÉ | Armenian Fashion",
+    description:
+      "Discover LE VAURÉ — Armenian fashion, contemporary clothing and distinctive collections.",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "LE VAURÉ | Armenian Fashion",
+    description:
+      "Discover LE VAURÉ — Armenian fashion, contemporary clothing and distinctive collections.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  url: `${SITE_URL}/`,
+  name: "LE VAURÉ",
+  alternateName: ["LEVAURE", "LE VAURE", "Le Vauré"],
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: "LE VAURÉ",
+  alternateName: ["LEVAURE", "LE VAURE"],
+  url: `${SITE_URL}/`,
 };
 
 export default function RootLayout({
@@ -15,6 +84,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="site-layout">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+
         <DesignRuntime />
         <SiteChrome>{children}</SiteChrome>
       </body>
