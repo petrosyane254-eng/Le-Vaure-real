@@ -38,4 +38,4 @@ COPY --from=frontend-builder /app/frontend_v5/node_modules /app/frontend_v5/node
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "python manage.py migrate && python manage.py create_render_superuser && python manage.py collectstatic --noinput && gunicorn scorpion.wsgi:application --bind 127.0.0.1:8000 --workers 1 --threads 2 --timeout 120 --max-requests 300 --max-requests-jitter 30 & cd /app/frontend_v5 && npm start -- --hostname 0.0.0.0 --port ${PORT}"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py create_render_superuser && python manage.py collectstatic --noinput && gunicorn scorpion.wsgi:application --bind 127.0.0.1:8000 --workers 1 --threads 2 --timeout 120 --max-requests 300 --max-requests-jitter 30 & GUNICORN_PID=$!; echo 'Waiting for Django...'; until python -c \"import socket; s=socket.socket(); s.settimeout(1); s.connect(('127.0.0.1',8000)); s.close()\" 2>/dev/null; do sleep 1; done; echo 'Django ready - starting Next.js'; cd /app/frontend_v5 && npm start -- --hostname 0.0.0.0 --port ${PORT} & NEXT_PID=$!; wait -n $GUNICORN_PID $NEXT_PID; exit $?"]
