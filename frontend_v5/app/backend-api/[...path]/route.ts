@@ -19,19 +19,23 @@ async function proxy(
 
     if (
       k !== "host" &&
-      k !== "content-length" &&
-      k !== "origin" &&
-      k !== "referer"
+      k !== "content-length"
     ) {
       headers.set(key, value);
     }
   });
 
-  // Django should see the request as coming from itself.
+  // Django is behind Next.js.
   headers.set("Host", new URL(DJANGO).host);
+  headers.set("X-Forwarded-Proto", "https");
+  headers.set(
+    "X-Forwarded-Host",
+    request.headers.get("host") || "xn--levaur-gva.store"
+  );
 
-  // Forward browser cookies explicitly.
+  // Forward browser cookies to Django.
   const cookie = request.headers.get("cookie");
+
   if (cookie) {
     headers.set("cookie", cookie);
   }
@@ -65,7 +69,7 @@ async function proxy(
       }
     });
 
-    // Forward Django cookies to localhost frontend.
+    // Forward Django cookies to the frontend domain.
     const getSetCookie = (
       upstream.headers as Headers & {
         getSetCookie?: () => string[];
@@ -78,12 +82,15 @@ async function proxy(
       cookies = getSetCookie.call(upstream.headers);
     } else {
       const rawCookie = upstream.headers.get("set-cookie");
-      if (rawCookie) cookies = [rawCookie];
+
+      if (rawCookie) {
+        cookies = [rawCookie];
+      }
     }
 
     for (let cookieValue of cookies) {
-      // Remove backend Domain attribute so browser stores
-      // the cookie for the frontend host.
+      // Remove backend Domain attribute so the browser
+      // stores the cookie for the public frontend domain.
       cookieValue = cookieValue.replace(
         /;\s*Domain=[^;]+/gi,
         ""
@@ -103,7 +110,9 @@ async function proxy(
       {
         error: "Could not connect to Django backend.",
       },
-      { status: 502 }
+      {
+        status: 502,
+      }
     );
   }
 }
