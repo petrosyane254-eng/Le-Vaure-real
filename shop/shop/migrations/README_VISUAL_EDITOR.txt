@@ -1,0 +1,1 @@
+Do not copy a numbered migration from this patch. Run: python manage.py makemigrations shop\nthen: python manage.py migrate\n

@@ -1,0 +1,187 @@
+{% extends "shop/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ product.name }} | LE VAURÉ{% endblock %}
+
+{% block content %}
+<section class="lv-product-shell">
+  <div class="lv-product-breadcrumb">
+    <a href="{% url 'home' %}">Home</a><span>›</span>
+    <a href="{% url 'shop' %}">Shop</a><span>›</span>
+    <strong>{{ product.name }}</strong>
+  </div>
+
+  <div class="lv-product-premium">
+    <div class="lv-product-gallery-column">
+      <div class="lv-product-stage">
+        <div class="lv-product-stage-badge">LE VAURÉ</div>
+        {% if product.image %}
+          <img id="mainProductImage" src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% elif images %}
+          <img id="mainProductImage" src="{{ images.0.image.url }}" alt="{{ product.name }}">
+        {% else %}
+          <img id="mainProductImage" src="{% static 'images/logo.png' %}" alt="{{ product.name }}">
+        {% endif %}
+        <button class="lv-product-zoom" type="button" aria-label="Zoom product image">⌕</button>
+      </div>
+
+      <div class="lv-product-thumbs" aria-label="Product images">
+        {% if product.image %}
+          <button class="is-active" type="button" data-img="{{ product.image.url }}" aria-label="View main image">
+            <img src="{{ product.image.url }}" alt="">
+          </button>
+        {% endif %}
+        {% for image in images %}
+          <button type="button" data-img="{{ image.image.url }}" aria-label="View product image {{ forloop.counter }}">
+            <img src="{{ image.image.url }}" alt="">
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <aside class="lv-product-panel">
+      <div class="lv-product-category">
+        {% if product.category %}{{ product.category.name|upper }}{% else %}LE VAURÉ EDITION{% endif %}
+      </div>
+
+      <h1>{{ product.name }}</h1>
+
+      <div class="lv-product-price-row">
+        <div class="lv-product-price">{{ product.price|floatformat:0 }} ֏</div>
+        <span class="lv-product-tax">VAT included</span>
+      </div>
+
+      {% if product.description %}
+        <div class="lv-product-intro">{{ product.description|linebreaksbr }}</div>
+      {% endif %}
+
+      <div class="lv-product-rule"></div>
+
+      <div class="lv-product-stock-row">
+        {% if product.stock > 0 %}
+          <span class="lv-product-stock-dot"></span>
+          <strong>IN STOCK</strong>
+          <span>{{ product.stock }} AVAILABLE</span>
+        {% else %}
+          <span class="lv-product-stock-dot is-sold"></span>
+          <strong>SOLD OUT</strong>
+        {% endif %}
+      </div>
+
+      {% if product.stock > 0 %}
+        <form class="lv-product-buy-form" method="post" action="{% url 'add_cart' product.pk %}">
+          {% csrf_token %}
+          <label for="product-quantity">QUANTITY</label>
+          <div class="lv-product-buy-row">
+            <div class="lv-product-quantity">
+              <button type="button" data-qty="minus" aria-label="Decrease quantity">−</button>
+              <input id="product-quantity" type="number" name="quantity" min="1" max="{{ product.stock }}" value="1">
+              <button type="button" data-qty="plus" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="lv-product-add" type="submit">
+              <span>ADD TO CART</span><span>→</span>
+            </button>
+          </div>
+        </form>
+      {% else %}
+        <button class="lv-product-add is-disabled" type="button" disabled>SOLD OUT</button>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'toggle_wishlist' product.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button class="lv-product-wishlist{% if is_wishlisted %} is-active{% endif %}" type="submit">
+            <span>{% if is_wishlisted %}♥{% else %}♡{% endif %}</span>
+            {% if is_wishlisted %}REMOVE FROM WISHLIST{% else %}ADD TO WISHLIST{% endif %}
+          </button>
+        </form>
+      {% endif %}
+
+      <div class="lv-product-benefits">
+        <div><span>◇</span><p><strong>Premium quality</strong><small>Selected materials & refined finish</small></p></div>
+        <div><span>↺</span><p><strong>Easy returns</strong><small>14-day return window</small></p></div>
+        <div><span>□</span><p><strong>Fast delivery</strong><small>Reliable shipping across Armenia</small></p></div>
+      </div>
+
+      <div class="lv-product-accordion">
+        <details open>
+          <summary><span>PRODUCT DETAILS</span><b>+</b></summary>
+          <div>{{ product.description|default:"A refined LE VAURÉ piece designed with a clean, premium finish."|linebreaksbr }}</div>
+        </details>
+        <details>
+          <summary><span>DELIVERY & RETURNS</span><b>+</b></summary>
+          <div>Fast delivery across Armenia. Returns are accepted within 14 days when items meet the return conditions.</div>
+        </details>
+        <details>
+          <summary><span>CARE</span><b>+</b></summary>
+          <div>Handle with care. For garments, wash cold with similar colors and avoid high heat. For accessories, clean gently with a soft cloth.</div>
+        </details>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<div class="lv-product-lightbox" id="productLightbox" hidden>
+  <button type="button" class="lv-product-lightbox-close" aria-label="Close">×</button>
+  <img src="" alt="{{ product.name }} enlarged">
+</div>
+
+<script>
+(() => {
+  const main = document.getElementById('mainProductImage');
+  const thumbs = document.querySelectorAll('[data-img]');
+  thumbs.forEach((button) => {
+    button.addEventListener('click', () => {
+      if (!main) return;
+      main.classList.add('is-switching');
+      setTimeout(() => {
+        main.src = button.dataset.img;
+        main.classList.remove('is-switching');
+      }, 120);
+      thumbs.forEach((item) => item.classList.remove('is-active'));
+      button.classList.add('is-active');
+    });
+  });
+
+  const qty = document.getElementById('product-quantity');
+  document.querySelectorAll('[data-qty]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (!qty) return;
+      const min = Number(qty.min || 1);
+      const max = Number(qty.max || 999);
+      const current = Number(qty.value || 1);
+      qty.value = button.dataset.qty === 'plus' ? Math.min(max, current + 1) : Math.max(min, current - 1);
+    });
+  });
+
+  const lightbox = document.getElementById('productLightbox');
+  const zoom = document.querySelector('.lv-product-zoom');
+  const close = document.querySelector('.lv-product-lightbox-close');
+  if (lightbox && zoom && main) {
+    const lightboxImage = lightbox.querySelector('img');
+    zoom.addEventListener('click', () => {
+      lightboxImage.src = main.src;
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+    });
+    const closeLightbox = () => {
+      lightbox.hidden = true;
+      document.body.style.overflow = '';
+    };
+    close.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (event) => { if (event.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !lightbox.hidden) closeLightbox(); });
+  }
+
+  document.querySelectorAll('.lv-product-accordion details').forEach((detail) => {
+    detail.addEventListener('toggle', () => {
+      const icon = detail.querySelector('summary b');
+      if (icon) icon.textContent = detail.open ? '−' : '+';
+    });
+    const icon = detail.querySelector('summary b');
+    if (icon) icon.textContent = detail.open ? '−' : '+';
+  });
+})();
+</script>
+{% endblock %}

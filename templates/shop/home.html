@@ -1,0 +1,84 @@
+{% extends "shop/base.html" %}
+{% load i18n static %}
+
+{% block title %}LE VAURÉ | Official Store{% endblock %}
+{% block meta_description %}LE VAURÉ Armenian clothing. T-shirts with a brighter tomorrow.{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+<section class="home-hero">
+  <img src="{% static 'images/home-hero.jpg' %}" alt="LE VAURÉ new collection">
+  <div class="home-hero-copy">
+    <span>NEW COLLECTION</span>
+    <h1>MORE<br>THAN A T-SHIRT</h1>
+    <p>Wear your story.<br>Armenia. People. Places.</p>
+    <a href="{% url 'shop' %}" class="home-btn">SHOP NOW <b>→</b></a>
+    <div class="hero-count">01 / 03 <i></i></div>
+  </div>
+  <div class="hero-arrows"><button>←</button><button>→</button></div>
+</section>
+
+<section class="home-benefits">
+  <div><b>🚚</b><span><strong>FAST DELIVERY</strong><small>All over Armenia</small></span></div>
+  <div><b>♢</b><span><strong>SECURE PAYMENT</strong><small>Multiple payment options</small></span></div>
+  <div><b>□</b><span><strong>EASY RETURNS</strong><small>Within 14 days</small></span></div>
+  <div><b>◌</b><span><strong>HIGH QUALITY</strong><small>Premium cotton</small></span></div>
+</section>
+
+<section class="home-products-section">
+  <div class="home-section-head">
+    <div><h2>SHOP T-SHIRTS</h2><nav><a class="active">ALL</a><a>ARMENIAN CULTURE</a><a>TYPOGRAPHY</a><a>MINIMAL</a><a>STREETWEAR</a><a>NATURE</a></nav></div>
+    <div class="product-tools"><a href="{% url 'shop' %}">VIEW ALL →</a><form action="{% url 'shop' %}" method="get"><input name="q" placeholder="Search products..."><button>⌕</button></form></div>
+  </div>
+  <div class="home-product-grid">
+    {% for product in products %}
+    <article class="home-product-card">
+      <a class="home-product-image" href="{{ product.url }}">
+        {% if product.image %}<img src="{{ product.image }}" alt="{{ product.title }}">{% else %}<img src="{% static 'images/le-vaure-hero.png' %}" alt="{{ product.title }}">{% endif %}
+        <span class="heart">♡</span>
+      </a>
+      <div class="home-product-info"><a href="{{ product.url }}">{{ product.title }}</a><strong>{{ product.price }} ֏</strong><div class="swatches"><i></i><i></i><i></i></div></div>
+    </article>
+    {% empty %}
+      {% for n in "1234" %}<article class="home-product-card placeholder"><div class="home-product-image"><img src="{% static 'images/le-vaure-hero.png' %}" alt="LE VAURÉ T-shirt"><span class="heart">♡</span></div><div class="home-product-info"><a href="{% url 'shop' %}">LE VAURÉ Essential Tee</a><strong>12,000 ֏</strong><div class="swatches"><i></i><i></i><i></i></div></div></article>{% endfor %}
+    {% endfor %}
+  </div>
+  <div class="load-more"><a href="{% url 'shop' %}">LOAD MORE PRODUCTS ↓</a></div>
+</section>
+
+<section class="home-offer">
+  <div class="offer-copy"><small>SPECIAL OFFER</small><h2>GET 15% OFF<br>YOUR FIRST ORDER</h2><p>Use code <b>LEVAURE15</b> at checkout.</p><a class="home-btn" href="{% url 'shop' %}">SHOP NOW →</a></div>
+  <div class="offer-image"><img src="{% static 'images/heritage-armenia.jpg' %}" alt="Armenian mountains"></div>
+  <div class="offer-image"><img src="{% static 'images/men.jpg' %}" alt="LE VAURÉ streetwear"></div>
+</section>
+
+<section class="home-collections">
+  <div class="title-row"><h2>EXPLORE COLLECTIONS</h2><a href="{% url 'shop' %}">VIEW ALL →</a></div>
+  <div class="collection-grid">
+    <a href="{% url 'shop' %}" style="background-image:url('{% static 'images/accessories.jpg' %}')"><span><b>ARMENIAN CULTURE</b><small>SHOP NOW →</small></span></a>
+    <a href="{% url 'shop' %}" style="background-image:url('{% static 'images/le-vaure-hero.png' %}')"><span><b>TYPOGRAPHY</b><small>SHOP NOW →</small></span></a>
+    <a href="{% url 'shop' %}" style="background-image:url('{% static 'images/heritage-armenia.jpg' %}')"><span><b>MINIMAL</b><small>SHOP NOW →</small></span></a>
+    <a href="{% url 'shop' %}" style="background-image:url('{% static 'images/men.jpg' %}')"><span><b>STREETWEAR</b><small>SHOP NOW →</small></span></a>
+  </div>
+</section>
+
+<section class="home-story" id="lv-story">
+  <div class="story-image"><img src="{% static 'images/men.jpg' %}" alt="LE VAURÉ Armenia"></div>
+  <div class="story-copy"><small>ABOUT LEVAURÉ</small><h2>CLOTHING<br>WITH A PURPOSE</h2><p>Levauré is an Armenian-based clothing brand creating high-quality printed T-shirts inspired by our culture, people and the places we love. We believe in meaningful design, local production and a brighter tomorrow.</p><a class="outline-btn" href="{% url 'shop' %}">OUR STORY →</a></div>
+</section>
+
+<section class="home-testimonials">
+  <div class="title-row"><h2>HAPPY CLIENTS</h2><span>← &nbsp;&nbsp; →</span></div>
+  <div class="testimonial-grid">
+    <blockquote>“<p>Amazing quality and beautiful designs! Delivery was super fast. Highly recommend Levauré!</p><b>★★★★★</b><footer>Ani S.<small>Yerevan</small></footer></blockquote>
+    <blockquote>“<p>Finally an Armenian brand that feels modern and authentic. Will definitely order again!</p><b>★★★★★</b><footer>Tigran M.<small>Gyumri</small></footer></blockquote>
+    <blockquote>“<p>The T-shirt fits perfectly and the print quality is excellent. Love supporting local brands!</p><b>★★★★★</b><footer>Lilit K.<small>Vanadzor</small></footer></blockquote>
+  </div>
+</section>
+
+<section class="home-instagram">
+  <div class="title-row"><h2>FOLLOW US @LEVAURE</h2><a href="#">SEE MORE →</a></div>
+  <div class="insta-grid"><img src="{% static 'images/men.jpg' %}"><img src="{% static 'images/heritage-armenia.jpg' %}"><img src="{% static 'images/le-vaure-hero.png' %}"><img src="{% static 'images/accessories.jpg' %}"><img src="{% static 'images/home-hero.jpg' %}"><img src="{% static 'images/men.jpg' %}"></div>
+</section>
+{% endblock %}

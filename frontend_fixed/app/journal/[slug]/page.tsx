@@ -1,0 +1,2 @@
+"use client";import{useEffect,useState}from"react";import{useParams}from"next/navigation";
+export default function Article(){const{slug}=useParams<{slug:string}>();const[d,setD]=useState<any>(null);useEffect(()=>{fetch(`/backend-api/journal/${slug}/`,{cache:"no-store"}).then(r=>r.json()).then(setD)},[slug]);if(!d)return <div className="empty container">Loading…</div>;return <article className="article"><div className="eyebrow">{d.author}</div><h1>{d.title}</h1><p>{d.excerpt}</p><img src={d.coverImage} alt={d.title}/><div className="article-body">{d.body}</div></article>}

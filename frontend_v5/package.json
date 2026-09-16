@@ -1,0 +1,31 @@
+{
+  "name": "levaure-storefront",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@grapesjs/studio-sdk": "^1.2.1",
+    "@grapesjs/studio-sdk-plugins": "^1.0.39",
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.3.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "fabric": "^6.7.1",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.468.0",
+    "next": "^15.1.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "three": "^0.180.0",
+    "typescript": "^5.7.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.186.0"
+  }
+}

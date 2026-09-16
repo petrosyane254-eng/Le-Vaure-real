@@ -1,0 +1,29 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Node / Next
+node_modules/
+.next/
+frontend_v5/node_modules/
+frontend_v5/.next/
+frontend_backup/
+frontend_backup*/
+frontend_v5_SEND.zip
+
+# Local / temporary
+cloudflared.exe
+*.zip
+*.log
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.local
+.env.*.local
+frontend_v5/.env
+frontend_v5/.env.local

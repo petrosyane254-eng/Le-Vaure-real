@@ -1,0 +1,3 @@
+﻿"use client";import Link from "next/link";import{useEffect,useState}from"react";
+export default function Collections(){const[d,setD]=useState<any[]>([]);useEffect(()=>{fetch("/backend-api/collections/",{cache:"no-store"}).then(r=>r.json()).then(x=>setD(x.results||[]))},[]);return <main><div className="page-hero"><div className="container"><div className="eyebrow">DISCOVER</div><h1>COLLECTIONS</h1></div></div><section className="section"><div className="container"><div className="collections">{d.map(c=><Link href={`/collections/${c.slug}`} className="collection-card" key={c.slug} style={{backgroundImage:`url(${c.image})`}}><div><h3>{c.name}</h3><span>{c.subtitle}</span></div></Link>)}</div></div></section></main>}
+
