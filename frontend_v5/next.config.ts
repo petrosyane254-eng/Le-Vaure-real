@@ -4,6 +4,8 @@ const DJANGO =
   process.env.DJANGO_INTERNAL_URL || "http://127.0.0.1:8000";
 
 const nextConfig: NextConfig = {
+  trailingSlash: true,
+
   async rewrites() {
     return [
       {
