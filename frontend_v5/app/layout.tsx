@@ -5,6 +5,25 @@ import SiteChrome from "@/components/SiteChrome";
 
 const SITE_URL = "https://xn--levaur-gva.store";
 
+const BRAND_ALTERNATES = [
+  "LE VAURÉ",
+  "LE VAURE",
+  "LEVAURÉ",
+  "LEVAURE",
+  "LE VAUR",
+  "LEVAUR",
+  "VAURÉ",
+  "VAURE",
+  "Le Vauré",
+  "Le Vaure",
+  "Levauré",
+  "Levaure",
+  "Le Vaur",
+  "Levaur",
+  "Vauré",
+  "Vaure",
+];
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
@@ -14,18 +33,26 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Discover LE VAURÉ — Armenian fashion, contemporary clothing and distinctive collections.",
+    "Discover LE VAURÉ (LE VAURE / LEVAURE), an Armenian fashion brand featuring contemporary clothing and distinctive collections.",
 
   applicationName: "LE VAURÉ",
 
   keywords: [
     "LE VAURÉ",
-    "LEVAURE",
     "LE VAURE",
+    "LEVAURÉ",
+    "LEVAURE",
+    "LE VAUR",
+    "LEVAUR",
+    "VAURÉ",
+    "VAURE",
     "Le Vauré",
+    "Le Vaure",
+    "Levaure",
     "Armenian fashion",
     "Armenian clothing",
     "Armenian fashion brand",
+    "Armenian designer clothing",
   ],
 
   alternates: {
@@ -38,14 +65,14 @@ export const metadata: Metadata = {
     siteName: "LE VAURÉ",
     title: "LE VAURÉ | Armenian Fashion",
     description:
-      "Discover LE VAURÉ — Armenian fashion, contemporary clothing and distinctive collections.",
+      "Discover LE VAURÉ (LE VAURE / LEVAURE), an Armenian fashion brand featuring contemporary clothing and distinctive collections.",
   },
 
   twitter: {
     card: "summary_large_image",
     title: "LE VAURÉ | Armenian Fashion",
     description:
-      "Discover LE VAURÉ — Armenian fashion, contemporary clothing and distinctive collections.",
+      "Discover LE VAURÉ (LE VAURE / LEVAURE), an Armenian fashion brand featuring contemporary clothing and distinctive collections.",
   },
 
   robots: {
@@ -64,15 +91,15 @@ const websiteSchema = {
   "@id": `${SITE_URL}/#website`,
   url: `${SITE_URL}/`,
   name: "LE VAURÉ",
-  alternateName: ["LEVAURE", "LE VAURE", "Le Vauré"],
+  alternateName: BRAND_ALTERNATES,
 };
 
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "OnlineStore",
   "@id": `${SITE_URL}/#organization`,
   name: "LE VAURÉ",
-  alternateName: ["LEVAURE", "LE VAURE"],
+  alternateName: BRAND_ALTERNATES,
   url: `${SITE_URL}/`,
 };
 
@@ -90,6 +117,7 @@ export default function RootLayout({
             __html: JSON.stringify(websiteSchema),
           }}
         />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
