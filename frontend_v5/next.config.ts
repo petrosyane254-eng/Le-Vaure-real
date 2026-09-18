@@ -9,10 +9,6 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/southward-control-7x9/:path*",
-        destination: `${DJANGO}/southward-control-7x9/:path*`,
-      },
-      {
         source: "/static/:path*",
         destination: `${DJANGO}/static/:path*`,
       },
