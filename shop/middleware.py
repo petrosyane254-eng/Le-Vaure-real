@@ -24,13 +24,12 @@ class SiteAccessMiddleware:
         path = request.path
 
         allowed_prefixes = (
-            "/southward-control-7x9/",
+            "/southward-control-7x9",
             "/site-access/",
             "/api/",
             "/static/",
             "/media/",
         )
-
         allowed_exact_paths = (
             reverse("set_language"),
             "/robots.txt",
